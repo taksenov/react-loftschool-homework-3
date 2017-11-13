@@ -44,21 +44,27 @@ class App extends Component {
                             isSelected={true}
                             number={1}
                             isClickable={false}
-                        />
+                        >
+                            {stepTitles[0]}
+                        </Step>
                         <Step
                             key="Card information"
                             onClick={this.handleTabClick}
                             isSelected={false}
                             number={2}
                             isClickable={false}
-                        />
+                        >
+                            {stepTitles[1]}
+                        </Step>
                         <Step
                             key="Finish"
                             onClick={this.handleTabClick}
                             isSelected={false}
                             number={3}
                             isClickable={false}
-                        />
+                        >
+                            {stepTitles[2]}
+                        </Step>
                     </div>
                     <div className="form-content" />
                     <div className="button-panel">

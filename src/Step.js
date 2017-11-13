@@ -15,22 +15,24 @@ class Step extends PureComponent {
         onClick(number);
     } //handleClick
 
-    // handleDelete = () => {
-    //     const { id, onDelete } = this.props;
-    //     onDelete(id);
-    // };
-
     render() {
         return (
-            <div
-                className={
-                    (this.props.isSelected ? 'step-selected' : '') +
-                    (this.props.isClickable ? 'step-clickable step' : '')
-                }
-                onClick={this.props.isClickable ? this.handleClick : null}
-            >
-                <div className="step__number">{this.props.number}</div>
-                <div className="step__title">{this.props.childlen}</div>
+            <div>
+                <div
+                    className={
+                        'step ' +
+                        (this.props.isSelected ? 'step-selected ' : '') +
+                        (this.props.isClickable ? 'step-clickable ' : '')
+                    }
+                    onClick={this.props.isClickable ? this.handleClick : null}
+                >
+                    <div className="step__number">{this.props.number}</div>
+                </div>
+                <div className="step__title">
+                    {React.Children.map(this.props.children, el => {
+                        el;
+                    })}
+                </div>
             </div>
         );
     }
