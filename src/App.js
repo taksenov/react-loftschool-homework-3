@@ -37,7 +37,29 @@ class App extends Component {
         return (
             <div>
                 <div className="container">
-                    <div className="tab-panel" />
+                    <div className="tab-panel">
+                        <Step
+                            key="Personal information"
+                            onClick={this.handleTabClick}
+                            isSelected={true}
+                            number={1}
+                            isClickable={false}
+                        />
+                        <Step
+                            key="Card information"
+                            onClick={this.handleTabClick}
+                            isSelected={false}
+                            number={2}
+                            isClickable={false}
+                        />
+                        <Step
+                            key="Finish"
+                            onClick={this.handleTabClick}
+                            isSelected={false}
+                            number={3}
+                            isClickable={false}
+                        />
+                    </div>
                     <div className="form-content" />
                     <div className="button-panel">
                         <button className="button-next" onClick={this.handleClickNextForm}>
