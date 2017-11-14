@@ -11,6 +11,7 @@ class Step extends PureComponent {
     } //constructor
 
     handleClick() {
+        if (!this.props.isClickable) return;
         const { number, onClick } = this.props;
         onClick(number);
     } //handleClick
@@ -24,15 +25,11 @@ class Step extends PureComponent {
                         (this.props.isSelected ? 'step-selected ' : '') +
                         (this.props.isClickable ? 'step-clickable ' : '')
                     }
-                    onClick={this.props.isClickable ? this.handleClick : null}
+                    onClick={this.handleClick}
                 >
                     <div className="step__number">{this.props.number}</div>
                 </div>
-                <div className="step__title">
-                    {React.Children.map(this.props.children, el => {
-                        el;
-                    })}
-                </div>
+                <div className="step__title">{this.props.children}</div>
             </div>
         );
     }
