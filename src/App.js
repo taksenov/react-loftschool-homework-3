@@ -19,7 +19,7 @@ class App extends Component {
             steps: {
                 one: {
                     isSelected: true,
-                    isClickable: false
+                    isClickable: true
                 },
                 two: {
                     isSelected: false,
@@ -45,8 +45,11 @@ class App extends Component {
         });
     } //handleTabClick
 
-    handleChangeForm(arg) {
-        console.log('handleChangeForm arg =', arg);
+    handleChangeForm(name, value) {
+        console.log('handleChangeForm name', name);
+        console.log('handleChangeForm value', value);
+
+        // this.setState({ : value });
     } //handleChangeForm
 
     handleClickNextForm() {
@@ -69,8 +72,8 @@ class App extends Component {
                 <div className="container">
                     <div className="tab-panel">
                         <Step
-                            key="Personal information"
-                            onClick={this.handleTabClick.bind(this.props.number)}
+                            key={stepTitles[0]}
+                            onClick={this.handleTabClick}
                             isSelected={this.state.steps.one.isSelected}
                             number={1}
                             isClickable={this.state.steps.one.isClickable}
@@ -78,7 +81,7 @@ class App extends Component {
                             {stepTitles[0]}
                         </Step>
                         <Step
-                            key="Card information"
+                            key={stepTitles[1]}
                             onClick={this.handleTabClick}
                             isSelected={this.state.steps.two.isSelected}
                             number={2}
@@ -87,7 +90,7 @@ class App extends Component {
                             {stepTitles[1]}
                         </Step>
                         <Step
-                            key="Finish"
+                            key={stepTitles[2]}
                             onClick={this.handleTabClick}
                             isSelected={this.state.steps.three.isSelected}
                             number={3}
@@ -106,12 +109,24 @@ class App extends Component {
                             />
                         )}
                         {this.state.step === 2 && (
-                            <CardForm cardNumber={this.state.cardNumber} onChangeForm={this.handleChangeForm} />
+                            <CardForm
+                                cardNumber={this.state.cardNumber}
+                                onChangeForm={this.handleChangeForm}
+                            />
                         )}
                         {this.state.step === 3 && <span>Поздравляем!</span>}
                     </div>
                     <div className="button-panel">
-                        <button className="button-next" onClick={this.handleClickNextForm}>
+                        <button
+                            disabled={
+                                !this.isFormCommitable() ||
+                                !this.state.isTimeOver
+                                    ? true
+                                    : false
+                            }
+                            className="button-next"
+                            onClick={this.handleClickNextForm}
+                        >
                             Next
                         </button>
                     </div>
