@@ -19,7 +19,7 @@ class App extends Component {
             steps: {
                 one: {
                     isSelected: true,
-                    isClickable: true
+                    isClickable: false
                 },
                 two: {
                     isSelected: false,
@@ -46,10 +46,7 @@ class App extends Component {
     } //handleTabClick
 
     handleChangeForm(name, value) {
-        console.log('handleChangeForm name', name);
-        console.log('handleChangeForm value', value);
-
-        // this.setState({ : value });
+        this.setState({ [name]: value });
     } //handleChangeForm
 
     handleClickNextForm() {
@@ -60,9 +57,36 @@ class App extends Component {
         });
     } //handleClickNextForm
 
-    handleChangeTimeOver() {} //handleChangeTimeOver
+    handleChangeTimeOver(bool) {
+        let timeOverStatus = this.state.isTimeOver;
+        if (bool) this.setState({ isTimeOver: !timeOverStatus });
+    } //handleChangeTimeOver
 
-    isFormCommitable() {} //isFormCommitable
+    isFormCommitable() {
+        switch (this.state.step) {
+            case 1:
+                if (
+                    this.state.firstName !== '' &&
+                    this.state.lastName !== '' &&
+                    this.state.email !== '' &&
+                    this.state.email.includes('@')
+                )
+                    return true;
+                else return false;
+
+            // Должен возвращать false если state.firstName === '' && state.lastName !== '' && state.email !== '' && state.email.includes('@') (1ms)
+            //           √ Должен возвращать false если state.firstName !== '' && state.lastName === '' && state.email !== '' && state.email.includes('@') (2ms)
+            //           √ Должен возвращать false если state.firstName !== '' && state.lastName !== '' && state.email === '' && state.email.includes('@') (2ms)
+
+            // case 2:
+            // alert('В точку!');
+            // case 3:
+            // alert('Перебор');
+            default:
+                return false;
+        }
+        // true если state.firstName !== '' && state.lastName !== '' && state.email !== '' && state.email.includes('@')
+    } //isFormCommitable
 
     renderForm() {} //renderForm
 

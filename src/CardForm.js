@@ -28,7 +28,8 @@ export class CardForm extends Component {
 
     handleChangeForm(event) {
         const { onChangeForm } = this.props;
-        onChangeForm(event.target.name, event.target.value);
+        const { name, value } = event.target;
+        onChangeForm(name, value);
     } //handleChangeForm
 
     render() {
