@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import Step from './Step';
+import PersonalForm from './PersonalForm';
+import CardForm from './CardForm';
 
 const stepTitles = ['Personal information', 'Card information', 'Finish'];
 
@@ -13,7 +15,21 @@ class App extends Component {
             lastName: '',
             email: '',
             cardNumber: '',
-            isTimeOver: false
+            isTimeOver: false,
+            steps: {
+                one: {
+                    isSelected: true,
+                    isClickable: false
+                },
+                two: {
+                    isSelected: false,
+                    isClickable: false
+                },
+                three: {
+                    isSelected: false,
+                    isClickable: false
+                }
+            }
         };
         this.handleTabClick = this.handleTabClick.bind(this);
         this.handleChangeForm = this.handleChangeForm.bind(this);
@@ -23,16 +39,30 @@ class App extends Component {
         this.renderForm = this.renderForm.bind(this);
     } //constructor
 
-    handleTabClick() {} //handleTabClick
-    handleChangeForm() {} //handleChangeForm
+    handleTabClick(number) {
+        this.setState({
+            step: number
+        });
+    } //handleTabClick
+
+    handleChangeForm(arg) {
+        console.log('handleChangeForm arg =', arg);
+    } //handleChangeForm
+
     handleClickNextForm() {
-        console.log('handleClickNextForm');
+        if (this.state.step === 3) return;
+        let thisStep = this.state.step;
+        this.setState({
+            step: ++thisStep
+        });
     } //handleClickNextForm
+
     handleChangeTimeOver() {} //handleChangeTimeOver
+
     isFormCommitable() {} //isFormCommitable
+
     renderForm() {} //renderForm
 
-    //    {/* disabled={!this.isFormCommitable || !this.state.isTimeOver ? true : false} */}
     render() {
         return (
             <div>
@@ -40,33 +70,46 @@ class App extends Component {
                     <div className="tab-panel">
                         <Step
                             key="Personal information"
-                            onClick={this.handleTabClick}
-                            isSelected={true}
+                            onClick={this.handleTabClick.bind(this.props.number)}
+                            isSelected={this.state.steps.one.isSelected}
                             number={1}
-                            isClickable={false}
+                            isClickable={this.state.steps.one.isClickable}
                         >
                             {stepTitles[0]}
                         </Step>
                         <Step
                             key="Card information"
                             onClick={this.handleTabClick}
-                            isSelected={false}
+                            isSelected={this.state.steps.two.isSelected}
                             number={2}
-                            isClickable={false}
+                            isClickable={this.state.steps.two.isClickable}
                         >
                             {stepTitles[1]}
                         </Step>
                         <Step
                             key="Finish"
                             onClick={this.handleTabClick}
-                            isSelected={false}
+                            isSelected={this.state.steps.three.isSelected}
                             number={3}
-                            isClickable={false}
+                            isClickable={this.state.steps.three.isClickable}
                         >
                             {stepTitles[2]}
                         </Step>
                     </div>
-                    <div className="form-content" />
+                    <div className="form-content">
+                        {this.state.step === 1 && (
+                            <PersonalForm
+                                firstName={this.state.firstName}
+                                lastName={this.state.lastName}
+                                email={this.state.email}
+                                onChangeForm={this.handleChangeForm}
+                            />
+                        )}
+                        {this.state.step === 2 && (
+                            <CardForm cardNumber={this.state.cardNumber} onChangeForm={this.handleChangeForm} />
+                        )}
+                        {this.state.step === 3 && <span>Поздравляем!</span>}
+                    </div>
                     <div className="button-panel">
                         <button className="button-next" onClick={this.handleClickNextForm}>
                             Next

@@ -1,40 +1,46 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Title from './Title';
 import './CardForm.css';
 
 export class CardForm extends Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.state = {
-      leftTime: 120
-    };
-    props.onChangeTimeOver(false);
-  }
+        this.state = { leftTime: 120 };
+        props.onChangeTimeOver(false);
 
-  componentDidMount() {
-    this.id = setInterval(() => {
-      const leftTime = Math.max(this.state.leftTime - 1, 0);
-      this.setState({leftTime});
-      if (leftTime === 0 && this.state.leftTime === 1) {
-        this.props.onChangeTimeOver(true);
-      }
-    }, 1000);
-  }
+        this.handleChangeForm = this.handleChangeForm.bind(this);
+    }
 
-  componentWillUnmount() {
-    clearInterval(this.id);
-  }
+    componentDidMount() {
+        this.id = setInterval(() => {
+            const leftTime = Math.max(this.state.leftTime - 1, 0);
+            this.setState({ leftTime });
+            if (leftTime === 0 && this.state.leftTime === 1) {
+                this.props.onChangeTimeOver(true);
+            }
+        }, 1000);
+    }
 
-  render() {
-    const {leftTime} = this.state;
-    return (
-      <div>
-        <Title>Номер карты</Title>
-        <p className="left-time">Осталось {leftTime} секунд</p>
-      </div>
-    );
-  }
+    componentWillUnmount() {
+        clearInterval(this.id);
+    }
+
+    handleChangeForm() {
+        const { name, value, onChangeForm } = this.props;
+        onChangeForm(name, value);
+    } //handleChangeForm
+
+    render() {
+        const { leftTime } = this.state;
+        return (
+            <div className="card-form">
+                <Title>Номер карты</Title>
+                <input type="text" name="cardNumber" onChange={this.handleChangeForm} />
+                <p className="left-time">Осталось {leftTime} секунд</p>
+            </div>
+        );
+    }
 }
 
 export default CardForm;
