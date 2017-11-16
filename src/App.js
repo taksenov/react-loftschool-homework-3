@@ -15,21 +15,7 @@ class App extends Component {
             lastName: '',
             email: '',
             cardNumber: '',
-            isTimeOver: false,
-            steps: {
-                one: {
-                    isSelected: true,
-                    isClickable: false
-                },
-                two: {
-                    isSelected: false,
-                    isClickable: false
-                },
-                three: {
-                    isSelected: false,
-                    isClickable: false
-                }
-            }
+            isTimeOver: false
         };
         this.handleTabClick = this.handleTabClick.bind(this);
         this.handleChangeForm = this.handleChangeForm.bind(this);
@@ -65,88 +51,71 @@ class App extends Component {
     isFormCommitable() {
         switch (this.state.step) {
             case 1:
-                if (
+                return (
                     this.state.firstName !== '' &&
                     this.state.lastName !== '' &&
                     this.state.email !== '' &&
                     this.state.email.includes('@')
-                )
-                    return true;
-                else return false;
-
-            // Должен возвращать false если state.firstName === '' && state.lastName !== '' && state.email !== '' && state.email.includes('@') (1ms)
-            //           √ Должен возвращать false если state.firstName !== '' && state.lastName === '' && state.email !== '' && state.email.includes('@') (2ms)
-            //           √ Должен возвращать false если state.firstName !== '' && state.lastName !== '' && state.email === '' && state.email.includes('@') (2ms)
-
-            // case 2:
-            // alert('В точку!');
-            // case 3:
-            // alert('Перебор');
+                );
+            case 2:
+                return this.state.cardNumber.length === 16;
             default:
                 return false;
         }
-        // true если state.firstName !== '' && state.lastName !== '' && state.email !== '' && state.email.includes('@')
     } //isFormCommitable
 
-    renderForm() {} //renderForm
+    renderForm() {
+        switch (this.state.step) {
+            case 1:
+                return (
+                    <PersonalForm
+                        firstName={this.state.firstName}
+                        lastName={this.state.lastName}
+                        email={this.state.email}
+                        onChangeForm={this.handleChangeForm}
+                    />
+                );
+            case 2:
+                return (
+                    <CardForm
+                        cardNumber={this.state.cardNumber}
+                        onChangeForm={this.handleChangeForm}
+                        onChangeTimeOver={this.handleChangeTimeOver}
+                    />
+                );
+            case 3:
+                return 'Поздравляем!';
+            default:
+                return false;
+        }
+    } //renderForm
 
     render() {
         return (
             <div>
                 <div className="container">
                     <div className="tab-panel">
-                        <Step
-                            key={stepTitles[0]}
-                            onClick={this.handleTabClick}
-                            isSelected={this.state.steps.one.isSelected}
-                            number={1}
-                            isClickable={this.state.steps.one.isClickable}
-                        >
-                            {stepTitles[0]}
-                        </Step>
-                        <Step
-                            key={stepTitles[1]}
-                            onClick={this.handleTabClick}
-                            isSelected={this.state.steps.two.isSelected}
-                            number={2}
-                            isClickable={this.state.steps.two.isClickable}
-                        >
-                            {stepTitles[1]}
-                        </Step>
-                        <Step
-                            key={stepTitles[2]}
-                            onClick={this.handleTabClick}
-                            isSelected={this.state.steps.three.isSelected}
-                            number={3}
-                            isClickable={this.state.steps.three.isClickable}
-                        >
-                            {stepTitles[2]}
-                        </Step>
+                        {stepTitles.map((title, index) => (
+                            <Step
+                                key={title}
+                                number={index + 1}
+                                onClick={this.handleTabClick}
+                                isSelected={this.state.step - 1 === index}
+                                isClickable={
+                                    index !== this.state.step - 1 &&
+                                    index < this.state.step
+                                }
+                            >
+                                {title}
+                            </Step>
+                        ))}
                     </div>
-                    <div className="form-content">
-                        {this.state.step === 1 && (
-                            <PersonalForm
-                                firstName={this.state.firstName}
-                                lastName={this.state.lastName}
-                                email={this.state.email}
-                                onChangeForm={this.handleChangeForm}
-                            />
-                        )}
-                        {this.state.step === 2 && (
-                            <CardForm
-                                cardNumber={this.state.cardNumber}
-                                onChangeForm={this.handleChangeForm}
-                            />
-                        )}
-                        {this.state.step === 3 && <span>Поздравляем!</span>}
-                    </div>
+                    <div className="form-content">{this.renderForm()}</div>
                     <div className="button-panel">
                         <button
                             disabled={
                                 !this.isFormCommitable() ||
-                                !this.state.isTimeOver
-                                    ? true
-                                    : false
+                                this.state.isTimeOver
                             }
                             className="button-next"
                             onClick={this.handleClickNextForm}
